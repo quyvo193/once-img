@@ -186,7 +186,7 @@ func viewPageHandler(w http.ResponseWriter, r *http.Request) {
 		time.AfterFunc(viewDuration, func() {
 			store.Lock()
 			delete(store.images, id)
-			os.Remove(img.OriginalPath) // Delete file from disk
+			// os.Remove(img.OriginalPath) // Delete file from disk
 			store.Unlock()
 			log.Printf("Deleted image %s and file %s after timeout.", id, img.OriginalPath)
 		})
