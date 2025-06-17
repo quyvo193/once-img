@@ -25,7 +25,7 @@ const (
 	uploadDir       = "uploaded-img"
 	cleanupInterval = 5 * time.Minute
 	unviewedExpiry  = 5 * time.Minute
-	viewDuration    = 30 * time.Second
+	viewDuration    = 10 * time.Second
 )
 
 // Image represents the stored image data and its metadata.
@@ -126,7 +126,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Render the share page
-	err = templates.ExecuteTemplate(w, "view.html", data)
+	err = templates.ExecuteTemplate(w, "share.html", data)
 	if err != nil {
 		http.Error(w, "Could not render template", http.StatusInternalServerError)
 	}

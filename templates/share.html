@@ -17,11 +17,21 @@
   </head>
   <body class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="max-w-md w-full bg-white p-8 rounded-xl shadow-lg text-center">
-      <h1 class="text-3xl font-bold text-gray-800 mb-4">Link Generated!</h1>
+      <h1 class="text-3xl font-bold text-gray-800 mb-2">Link Generated!</h1>
       <p class="text-gray-500 mb-6">
-        Share this link with others. It will expire 30 seconds after the first
-        view.
+        Share this link. It expires 30 seconds after the first view.
       </p>
+
+      {{if .Thumbnail}}
+      <div class="mb-4">
+        <p class="text-sm font-medium text-gray-500 mb-2">Image Preview:</p>
+        <img
+          src="data:image/jpeg;base64,{{.Thumbnail}}"
+          alt="Uploaded thumbnail"
+          class="mx-auto rounded-lg border border-gray-200 max-h-48"
+        />
+      </div>
+      {{end}}
 
       <div class="mt-4 flex rounded-md shadow-sm">
         <input
@@ -51,17 +61,24 @@
           </svg>
         </button>
       </div>
-      <p id="copy-success" class="text-green-500 text-sm mt-2 invisible">
+      <p id="copy-success" class="text-green-500 text-sm mt-2 h-5 invisible">
         Link copied to clipboard!
       </p>
+
+      <a
+        href="/"
+        class="mt-6 inline-block w-full text-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      >
+        Upload Another Image
+      </a>
     </div>
 
     <script>
       document.getElementById("copy-button").addEventListener("click", () => {
         const linkInput = document.getElementById("share-link");
         linkInput.select();
-        // Using document.execCommand for broader browser compatibility in iFrames
         try {
+          // Using document.execCommand for broader browser compatibility in iFrames
           document.execCommand("copy");
           document.getElementById("copy-success").classList.remove("invisible");
           setTimeout(() => {
@@ -69,7 +86,11 @@
           }, 2000);
         } catch (err) {
           console.error("Failed to copy text: ", err);
-          alert("Failed to copy link. Please copy it manually.");
+          // Avoid using alert()
+          const copySuccess = document.getElementById("copy-success");
+          copySuccess.textContent = "Copy failed!";
+          copySuccess.classList.remove("invisible", "text-green-500");
+          copySuccess.classList.add("text-red-500");
         }
       });
     </script>
