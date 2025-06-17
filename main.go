@@ -23,7 +23,7 @@ import (
 
 const (
 	uploadDir       = "uploaded-img"
-	cleanupInterval = 5 * time.Minute
+	cleanupInterval = 12 * time.Hour
 	unviewedExpiry  = 5 * time.Minute
 	viewDuration    = 10 * time.Second
 )
@@ -203,6 +203,7 @@ func viewPageHandler(w http.ResponseWriter, r *http.Request) {
 		"ImageURL":      fmt.Sprintf("/img/%s", id),
 		"Duration":      viewDuration.Seconds(),
 		"TimeRemaining": (viewDuration - time.Since(*img.FirstViewTime)).Seconds(),
+		"ImageID":       id,
 	}
 	templates.ExecuteTemplate(w, "view.html", data)
 }
@@ -236,6 +237,10 @@ func serveImageHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, img.OriginalPath)
 }
 
+func expiredPageHandler(w http.ResponseWriter, r *http.Request) {
+	templates.ExecuteTemplate(w, "expired.html", nil)
+}
+
 // cleanupTask runs in the background to remove old, unviewed images.
 func cleanupTask() {
 	for {
@@ -265,6 +270,7 @@ func main() {
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/view/", viewPageHandler)
 	http.HandleFunc("/img/", serveImageHandler)
+	http.HandleFunc("/expired/", expiredPageHandler)
 
 	go cleanupTask()
 

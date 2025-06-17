@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF--8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="Check out this image!" />
+    <meta property="og:image" content="{{.ImageURL}}" />
+    <meta
+      property="og:url"
+      content="https://onceimg.onrender.com/view/{{.ImageID}}"
+    />
     <title>Viewing Image</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link
@@ -68,7 +74,7 @@
 
       // Redirect to homepage when done
       const redirectToHome = () => {
-          window.location.href = "/";
+          window.location.href = "/expired/";
       };
 
       const interval = setInterval(() => {
